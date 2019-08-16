@@ -1,0 +1,23 @@
+# Sample playbook for sending a formatted message to a private Slack channel. For use with https://playbook.cloud. 
+# Author: Refactr, Inc.
+# Required variables:
+#   slack_token: The slash-separated incoming webhook token, which is part of the Slack incoming webhook URL.
+---
+- hosts: localhost
+  tasks:
+    - name: Post success message to Slack channel
+      slack:
+        token: "{{ slack_token }}"
+        attachments:
+          - fallback: Microsoft Flow and playbook.cloud are connected!
+            color: "#C30000"
+            author_name: playbook.cloud
+            author_link: https://app.playbook.cloud/
+            author_icon: https://refactr001.blob.core.windows.net/public/playbookcloud/dark-256x256.png
+            title: "Job #{{ lookup('env', 'PLAYBOOKCLOUD_JOB_NUMBER') }}"
+            title_link: https://app.playbook.cloud/jobs
+            text: Microsoft Flow and playbook.cloud are connected!
+            thumb_url: https://refactr001.blob.core.windows.net/public/playbookcloud/favicon.png
+            footer: Microsoft Flow
+            footer_icon: https://refactr001.blob.core.windows.net/public/icons/microsoft-flow_128.png
+            ts: "{{ ansible_date_time.epoch }}"
