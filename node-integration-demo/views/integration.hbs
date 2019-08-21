@@ -1,0 +1,27 @@
+<div class="ui main text container">
+  <form action="/integration" method="POST" class="ui form segment">
+    <h1 class="ui header">Configure Integration</h1>
+    <p>Enter your authentication details for playbook.cloud. These will be saved and reused to generate access tokens for the playbook.cloud API.</p>
+    <div class="field">
+      <div class="ui fluid icon input">
+        <input type="text" name="username" placeholder="Username" value="{{ integration.username }}" required>
+      </div>
+    </div>
+    <div class="field">
+      <div class="ui fluid icon input">
+        <input type="password" name="password" placeholder="Password" required>
+      </div>
+    </div>
+    <div class="field">
+      <button type="submit" class="ui primary button">{{#if integration}}Update{{else}}Create{{/if}}</button>
+    </div>
+  </form>
+  {{#if integration}}
+    <form action="/integration/delete" method="POST" class="ui form segment">
+      <h1 class="ui header">Delete Integration</h1>
+      <div class="field">
+        <button type="submit" class="ui red button">Delete</button>
+      </div>
+    </form>
+  {{/if}}
+</div>

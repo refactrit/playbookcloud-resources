@@ -1,0 +1,22 @@
+<div class="ui main text container">
+  <form action="/integration" method="POST" class="ui form segment">
+    <h1 class="ui header">Run a Playbook</h1>
+    <div class="field">
+      <div class="ui fluid icon input">
+        <select name="playbook_id" required>
+          {{#each playbooks}}
+            <option value="{{ this.id }}">{{ this.name }} <small>{{ this.id }}</small></option>
+          {{/each}}
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <div class="ui fluid icon input">
+        <input type="number" name="playbook_revision" placeholder="Playbook Revision" value="1" required>
+      </div>
+    </div>
+    <div class="field">
+      <button type="submit" class="ui primary button">Run</button>
+    </div>
+  </form>
+</div>

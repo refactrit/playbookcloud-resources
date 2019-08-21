@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>playbook.cloud Integration</title>
+
+    <link rel="shortcut icon"href="/images/favicon.png">
+    <link rel="stylesheet" type="text/css" href="/styles/semantic.min.css">
+    <link rel='stylesheet' href='/styles/style.css' />
+  </head>
+  <body>
+    <div class="ui fixed inverted menu">
+      <div class="ui container">
+        <span class="header item">
+          <img class="logo" src="/images/light-256x256.png">
+        </span>
+        {{#if user}}
+          <a href="/integration" class="item">Configure Integration</a>
+          {{#if integration}}
+            <a href="/run" class="item">Run Playbook</a>
+          {{/if}}
+          <span class="item right">
+            <span class="welcome-user">Hello, {{ user.username }}!</span>
+            <a href="/logout">
+              <button class="ui primary button">Log Out</button>
+            </a>
+          </span>
+        {{else}}
+          <span class="item right">
+            <a href="/login">
+              <button class="ui primary button">Log In</button>
+            </a>
+          </span>
+        {{/if}}
+      </div>
+    </div>
+
+    {{{body}}}
+
+    <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="/js/semantic.min.js"></script>
+    <script type="text/javascript" src="/js/scripts.js"></script>
+  </body>
+</html>
