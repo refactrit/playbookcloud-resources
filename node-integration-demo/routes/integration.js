@@ -8,7 +8,6 @@ const router = express.Router();
 
 router.get('/', [requireUser, asyncHandler(async function(req, res) {
   let integration = await getIntegration(req.user.id);
-  console.info(integration);
   render(req, res, integration);
 })]);
 

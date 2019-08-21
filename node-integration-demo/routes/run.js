@@ -16,7 +16,6 @@ router.get('/', [requireUser, asyncHandler(async function(req, res) {
 })]);
 
 router.post('/', [requireUser, asyncHandler(async function(req, res) {
-  console.info(req.body);
   await pbc.runPlaybook(req.user.id, req.body.playbook_id, parseInt(req.body.playbook_revision));
   let playbooks = await pbc.listPlaybooks(req.user.id);
   res.render('run', {
