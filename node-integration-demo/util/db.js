@@ -42,7 +42,7 @@ module.exports = {
     getToken: async function(userId) {
       return await db.get(`token:${userId}`);
     },
-    setToken: async function(userId, token) {
-      return await db.set(`token:${userId}`, token);
+    setToken: async function(userId, token, exp) {
+      return await db.psetex(`token:${userId}`, exp, token);
     }
 };

@@ -1,11 +1,11 @@
 <div class="ui main text container">
-  <form action="/integration" method="POST" class="ui form segment">
+  <form action="/run" method="POST" class="ui form segment">
     <h1 class="ui header">Run a Playbook</h1>
     <div class="field">
       <div class="ui fluid icon input">
         <select name="playbook_id" required>
           {{#each playbooks}}
-            <option value="{{ this.id }}">{{ this.name }} <small>{{ this.id }}</small></option>
+            <option value="{{ this.id }}">{{ this.name }} ({{ this.id }})</option>
           {{/each}}
         </select>
       </div>
@@ -18,5 +18,10 @@
     <div class="field">
       <button type="submit" class="ui primary button">Run</button>
     </div>
+    {{#if resultMessage}}
+      <div class="ui info message">
+        <div class="header">{{ resultMessage }}</div>
+      </div>
+    {{/if}}
   </form>
 </div>

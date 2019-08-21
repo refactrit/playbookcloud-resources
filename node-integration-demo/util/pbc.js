@@ -1,8 +1,20 @@
+const util = require('util');
 const fetch = require('node-fetch');
+const jwt = require('jsonwebtoken');
+const jwks = require('jwks-rsa');
 
 const { getToken, setToken, getIntegration } = require('../util/db.js');
 
-const baseUrl = 'https://api.playbook.cloud/v1'
+const baseUrl = 'https://api.playbook.cloud/v1';
+const jwksUri = 'https://auth.playbook.cloud/.well-known/jwks.json';
+const jwtDomain = 'auth.playbook.cloud';
+
+let jwksClient = jwks({
+  cache: true,
+  rateLimit: true,
+  jwksRequestsPerMinute: 5,
+  jwksUri: jwksUri
+});
 
 module.exports = {
   listPlaybooks: async function(userId) {
@@ -20,19 +32,23 @@ module.exports = {
   },
   runPlaybook: async function(userId, playbook_id, playbook_revision) {
     let token = await renewToken(userId);
-    let result = await fetch(`${baseUrl}/playbooks`, {
+    let result = await fetch(`${baseUrl}/jobs`, {
       method: 'POST',
       headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
         Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
         playbook_id: playbook_id,
-        playbook_revision: parseInt(playbook_revision)
+        playbook_revision: playbook_revision
       })
     });
-    if (result.status !== 200) {
+    if (result.status !== 201) {
       throw new Error(`Failed to run playbooks for user ${userId}. Status code is ${result.status}.`);
     }
+    let body = await result.json();
+    console.info(body);
   }
 };
 
@@ -51,6 +67,25 @@ async function renewToken(userId) {
     throw new Error(`Failed to get token for user ${userId}. Status code is ${result.status}.`);
   }
   let body = await result.json();
-  await setToken(userId, body.token);
+  let payload = await verifyToken(body.token);
+  let exp = payload.exp*1000 - Date.now() - 5000;
+  await setToken(userId, body.token, exp);
   return body.token;
+}
+
+async function verifyToken(token) {
+  function getKey(header, callback) {
+    jwksClient.getSigningKey(header.kid, function(err, key) {
+      if (err) {
+        callback(err);
+      } else {
+        callback(null, key.publicKey || key.rsaPublicKey);
+      }
+    });
+  }
+  return await util.promisify(jwt.verify.bind(jwt))(token, getKey, {
+    audience: `https://${jwtDomain}`,
+    issuer: `https://${jwtDomain}/`,
+    algorithms: ['RS256']
+  });
 }
