@@ -15,5 +15,4 @@ This sample application demonstrates how to build a 3rd-party integration with p
 
 1. Runs on HTTP. Please use HTTPS in production.
 2. Stores passwords and tokens unencrypted in the database. Always encrypt sensitive data before storing in your own database.
-3. Token generation will require additional concurrency protection in highly distributed systems to prevent duplicate token requests. In Redis, a distributed lock with timeout could be used. See here: https://redislabs.com/ebook/part-2-core-concepts/chapter-8-building-a-simple-social-network/8-1-users-and-statuses/8-1-1-user-information/
-4. Requires Node.js 8 or higher.
+3. Requires Node.js 8 or higher.
